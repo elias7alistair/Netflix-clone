@@ -34,3 +34,12 @@
     transform: scale(1.08);
     /* opacity: 1; */
 }
+
+.logo_name{
+    position: relative;
+    top: -20px;
+    left: 11px;
+    font-stretch: semi-expanded;
+    transform: scale(1.4, 1);
+    color: #ffeced;
+}

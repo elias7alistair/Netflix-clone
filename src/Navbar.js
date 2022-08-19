@@ -19,7 +19,9 @@ function Navbar() {
   }, []);
   return (
     <div className={`navbar ${show && "navbar__black"}`}>
-      <img
+ 
+    <div className={'logo_name'}>Alistair's</div> 
+     <img
         src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
         alt="Netflix"
         className="Navbar__logo"
