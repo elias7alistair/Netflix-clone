@@ -2,6 +2,18 @@
   margin: 0;
 }
 
-.app{
+.app {
   background-color: #111;
+}
+
+.main-body {
+  min-height: 89vh;
+}
+.loader-body {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  min-height: 610px;
+  align-items: center;
+  flex-direction: column;
 }
