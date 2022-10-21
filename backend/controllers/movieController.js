@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 const directoryPath = path.join(__dirname, "Documents");
-const getMovieList = async (pathname) => {
+const getMovieList = async (pathname, parent) => {
   let directoryPath = path.resolve(__dirname, pathname),
     mainVideo = [];
   // console.log(directoryPath);
@@ -19,13 +19,19 @@ const getMovieList = async (pathname) => {
         nested = [],
         promises = [],
         testNested = [];
+      // parent = "";
       for (let file of files) {
         // console.log(file);
         let obj = {
           name: "",
           path: "",
         };
-        if (file.includes(".mkv") || file.includes(".mp4")) {
+        //   parent = file;
+        if (
+          file.includes(".mkv") ||
+          file.includes(".mp4") ||
+          file.includes(".avi")
+        ) {
           obj.name = file;
           obj.parentFile =
             directoryPath.split("\\")[directoryPath.split("\\").length - 1];
@@ -36,15 +42,20 @@ const getMovieList = async (pathname) => {
           }
           videos[obj.parentFile].push(obj);
         } else if (fs.lstatSync(directoryPath + "\\" + file).isDirectory()) {
-          promises.push(getMovieList(directoryPath + "\\" + file));
-          testNested = await getMovieList(directoryPath + "\\" + file);
+          promises.push(getMovieList(directoryPath + "\\" + file, file));
+          // testNested = await getMovieList(directoryPath + "\\" + file);
         }
       }
       nested = await Promise.all(promises);
+      let folder = {};
       if (nested && nested.length) {
-        nested.forEach((data) => {
-          videos = { ...videos, ...data };
-        });
+        //   nested.forEach((data) => {
+        //     if (!folder[data.parentFile]) {
+        //       folder[data.parentFile] = {};
+        //     }
+        //     folder[data.parentFile] = { ...folder[data.parentFile], ...data };
+        //   });
+        videos = { ...videos, [parent]: { ...nested } };
       }
       // console.log(pathname, videos, nested, "ets32");
       console.log(videos, "testse");
@@ -57,8 +68,9 @@ const getMovieList = async (pathname) => {
   return mainVideo;
 };
 const getMovies = async (req, res) => {
-  const videos = [];
-  let resp = await getMovieList("../../public/personal/shows");
+  const videos = [],
+    folder = req.body.folder || "shows";
+  let resp = await getMovieList("../../public/personal/" + folder, folder);
   console.log(resp);
 
   res.status(200).send({ videos: resp });
