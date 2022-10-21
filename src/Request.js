@@ -10,7 +10,8 @@ const requests = {
     fetchHorrorMovies: `/discover/tv?api_key=${API_KEY}&with_genres=80`,
     fetchRomanceMovies: `/discover/tv?api_key=${API_KEY}&with_genres=10749`,
     fetchDocumentaries: `/discover/tv?api_key=${API_KEY}&with_genres=99`,
-
+fetchSearch:`
+https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=hit&page=1&include_adult=false`
 
 }
 

@@ -16,7 +16,7 @@
     -webkit-animation-delay: 3s;
             animation-delay: 3s
 }
-h2{ height:48px;margin:0;padding:0}
+h2{ height:48px;margin:0;padding:0;   font-size: 33px;}
 @-webkit-keyframes move {
     0% { margin-top: 0em; }
     25% { margin-top: -48px; }

@@ -3,6 +3,7 @@ import "./loaderQuotes.css";
 
 const quote = [
   "Welcome to Alistair's Netflix Project..",
+  "Welcome to Alistair's Netflix Project..",
   "Hope you have a good time here",
 
   "Loading, Please wait!",

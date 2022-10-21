@@ -19,8 +19,9 @@
 .Navbar__logo{
     position: fixed;
     left: 20px;
+    top: 31px;
     width: 80px;
-    object-fit: contain
+    object-fit: contain;
 }
 
 .Navbar__avatar{
