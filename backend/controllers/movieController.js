@@ -36,7 +36,7 @@ const getMovieList = async (pathname, parent) => {
           obj.parentFile =
             directoryPath.split("\\")[directoryPath.split("\\").length - 1];
           obj.path = directoryPath.split("personal")[1] + "\\" + file;
-          if (obj.parentFile == "shows") obj.parentFile = file;
+       //     if (obj.parentFile == "shows") obj.parentFile = file;
           if (!videos[obj.parentFile]) {
             videos[obj.parentFile] = [];
           }
@@ -48,15 +48,18 @@ const getMovieList = async (pathname, parent) => {
       }
       nested = await Promise.all(promises);
       let folder = {};
-      if (nested && nested.length) {
-        //   nested.forEach((data) => {
-        //     if (!folder[data.parentFile]) {
-        //       folder[data.parentFile] = {};
-        //     }
-        //     folder[data.parentFile] = { ...folder[data.parentFile], ...data };
-        //   });
-        videos = { ...videos, [parent]: { ...nested } };
-      }
+      // if (nested && nested.length) {
+      //   //   nested.forEach((data) => {
+      //   //     if (!folder[data.parentFile]) {
+      //   //       folder[data.parentFile] = {};
+      //   //     }
+      //   //     folder[data.parentFile] = { ...folder[data.parentFile], ...data };
+      //   //   });
+      // }
+      // if (parent === "shows") {
+      //   videos[parent] = { ...videos};
+      // }
+      videos = { ...videos, [parent]: { ...videos[parent], ...nested } };
       // console.log(pathname, videos, nested, "ets32");
       console.log(videos, "testse");
       mainVideo = videos;
