@@ -59,7 +59,10 @@ const getMovieList = async (pathname, parent) => {
       // if (parent === "shows") {
       //   videos[parent] = { ...videos};
       // }
-      videos = { ...videos, [parent]: { ...videos[parent], ...nested } };
+      if(!videos[parent]){
+        videos[parent]= []
+      }
+      videos = { ...videos, [parent]: [ ...videos[parent], ...nested ] };
       // console.log(pathname, videos, nested, "ets32");
       console.log(videos, "testse");
       mainVideo = videos;

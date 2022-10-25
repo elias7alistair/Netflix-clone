@@ -12,7 +12,7 @@ import axios from "axios";
 //  2 19
 function App() {
   const random = Math.floor(Math.random() * 2) + "";
-  const [loading, setLoading] = useState(random);
+  const [loading, setLoading] = useState(false);
   const [moviePath, setMoviePath] = useState(false);
 
   useEffect(() => {
@@ -21,11 +21,13 @@ function App() {
       setLoading(false);
     }, 12000);
     setLoading(random);
-    getMovies();
+    // getMovies();
     return () => {};
   }, []);
   const getMovies = async () => {
-    const resp = await axios.get("http://localhost:3005/api/movies/");
+    const resp = await axios.post("http://localhost:3005/api/movies/", {
+      folder: "courses",
+    });
     console.log(resp, "est321t23");
     setMoviePath(resp.data.videos);
     // setLoading(false);
@@ -60,7 +62,13 @@ function App() {
             <Row
               title={"Available Movies"}
               // fetchUrl={'movies'}
-              fetchLocal={moviePath}
+              fetchLocal={"shows"}
+              isLargeRow
+            />
+            <Row
+              title={"Available Courses"}
+              // fetchUrl={'movies'}
+              fetchLocal={'courses'}
               isLargeRow
             />
             <Row title={"Horror Shows"} fetchUrl={requests.fetchHorrorMovies} />
