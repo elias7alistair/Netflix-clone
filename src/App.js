@@ -9,6 +9,7 @@ import LoaderQoutes from "./components/LoaderQuotes/LoaderQoutes";
 import { useEffect, useState } from "react";
 import SecondaryLoader from "./components/Loader/SecondaryLoader";
 import axios from "axios";
+import { videos } from "./data/data";
 //  2 19
 function App() {
   const random = Math.floor(Math.random() * 2) + "";
@@ -61,20 +62,20 @@ function App() {
             />
             <Row
               title={"Available Movies"}
-              // fetchUrl={'movies'}
-              fetchLocal={"shows"}
+               fetchUrl={'movies'}
+              // fetchLocal={{ videos: videos }}
               isLargeRow
             />
             <Row
               title={"Available Courses"}
               // fetchUrl={'movies'}
-              fetchLocal={'courses'}
+              fetchLocal={"courses"}
               isLargeRow
             />
             <Row title={"Horror Shows"} fetchUrl={requests.fetchHorrorMovies} />
             <Row
               title={"Romance Movies"}
-              fetchUrl={requests.fetchRomanceMovies}
+              fetchUrl={requests.fetchHorrorMovies}
             />
             <Row
               title={"Documentaries"}

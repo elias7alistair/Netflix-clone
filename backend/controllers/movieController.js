@@ -1,8 +1,17 @@
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-
+import Scraper from "images-scraper";
 const __filename = fileURLToPath(import.meta.url);
+const google = new Scraper({
+  puppeteer: {
+    headless: false,
+  },
+});
+//  const getMovieImages = ()=>{
+//    const results = await google.scrape(file, 2);
+
+//  }
 
 const __dirname = path.dirname(__filename);
 const directoryPath = path.join(__dirname, "Documents");
@@ -26,6 +35,16 @@ const getMovieList = async (pathname, parent) => {
           name: "",
           path: "",
         };
+        if (file.includes(".srt") || file.includes(".vtt")) {
+          (obj.name = file),
+            (obj.parentFile =
+              directoryPath.split("\\")[directoryPath.split("\\").length - 1]);
+          obj.subsPath = directoryPath.split("personal")[1] + "\\" + file;
+          if (!videos[obj.parentFile]) {
+            videos[obj.parentFile] = [];
+          }
+          videos[obj.parentFile].push(obj);
+        }
         //   parent = file;
         if (
           file.includes(".mkv") ||
@@ -36,7 +55,7 @@ const getMovieList = async (pathname, parent) => {
           obj.parentFile =
             directoryPath.split("\\")[directoryPath.split("\\").length - 1];
           obj.path = directoryPath.split("personal")[1] + "\\" + file;
-       //     if (obj.parentFile == "shows") obj.parentFile = file;
+          //     if (obj.parentFile == "shows") obj.parentFile = file;
           if (!videos[obj.parentFile]) {
             videos[obj.parentFile] = [];
           }
@@ -59,10 +78,10 @@ const getMovieList = async (pathname, parent) => {
       // if (parent === "shows") {
       //   videos[parent] = { ...videos};
       // }
-      if(!videos[parent]){
-        videos[parent]= []
+      if (!videos[parent]) {
+        videos[parent] = [];
       }
-      videos = { ...videos, [parent]: [ ...videos[parent], ...nested ] };
+      videos = { ...videos, [parent]: [...videos[parent], ...nested] };
       // console.log(pathname, videos, nested, "ets32");
       console.log(videos, "testse");
       mainVideo = videos;

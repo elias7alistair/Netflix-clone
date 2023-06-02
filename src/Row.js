@@ -15,8 +15,11 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
   const [trailerUrl, setTrailerUrl] = useState("");
   const [stretch, setStretch] = useState(false);
   const [moviePath, setMoviePath] = useState(false);
-  const [subMovie, setSubMovie] = useState(false)
-  console.log(subMovie, "ghah");
+  const [subMovie, setSubMovie] = useState(false);
+  const [uploadSubs, setUplaodSubs] = useState(false);
+
+  console.log(uploadSubs, "tes3");
+
   const onKeyDown = (e) => {
     console.log(e.which, "tes323");
     if (e.which === 90) {
@@ -38,9 +41,10 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
     const resp = await axios.post("http://localhost:3005/api/movies/", {
       folder: fetchLocal,
     });
-    console.log(resp, "est321t23");
-    setMoviePath(resp.data.videos.[fetchLocal]);
-    // setLoading(false);
+    console.log(fetchLocal, "est321t23");
+   // setMoviePath(fetchLocal.videos.shows);
+   setMoviePath(resp.data.videos.[fetchLocal]);
+    //  setLoading(false);
   };
 
   // fileStrucuter()
@@ -107,45 +111,46 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
   //   }
   // }
 
-  const displayRows = (rows,index) => {
-    let display = []
+  const displayRows = (rows, index) => {
+    let display = [];
     const result = Array.isArray(rows);
-    console.log(result)
+    console.log(result);
     if (result) {
-      rows.map(data => {
+      rows.map((data) => {
         let name = data.name || Object.keys(data)[0];
 
-
         if (name) {
-
-
           display.push(
             <div
               key={name}
               onClick={() => {
+                if (data.subsPath) {
+                  setUplaodSubs("personal" + data.subsPath);
+                  setShowMovie(showMovie);
+                  setShowCurrentVideo(showCurrentVideo);
+                }
                 if (data.path) {
                   setShowMovie(data);
                   setShowCurrentVideo("personal" + data.path);
-                  if(subMovie.length && !index){
-                    setSubMovie(false)
+                  if (subMovie.length && !index) {
+                    setSubMovie(false);
                   }
                 } else {
-                  if (subMovie.length ) {
-                    let check = subMovie?.[index]?.some(key => {
-                   console.log(Object.keys(key)[0],data[name])
+                  if (subMovie.length) {
+                    let check = subMovie?.[index]?.some((key) => {
+                      console.log(Object.keys(key)[0], name);
                       if (Object.keys(key)[0] == name) {
-                        return true
+                        return true;
                       }
-                    })
+                    });
                     if (check) {
-
-                      setSubMovie([...subMovie, data[name]])
+                      let temp = subMovie.splice(index, index + 1);
+                      setSubMovie([...temp, data[name]]);
                     } else {
-
-                      setSubMovie([data[name]])
+                      setSubMovie([data[name]]);
                     }
                   } else {
-                    setSubMovie([data[name]])
+                    setSubMovie([data[name]]);
                   }
                 }
                 //else {
@@ -159,9 +164,9 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
                 // }
                 // console.log(test)
               }}
-
-              className={`row__poster ${isLargeRow && "row__posterLarge"
-                } local-video`}
+              className={`row__poster ${
+                isLargeRow && "row__posterLarge"
+              } local-video`}
               src={
                 `${baseUrl}${name}`
                 // data.id === 113988
@@ -174,7 +179,7 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
             </div>
           );
         }
-      })
+      });
     }
     // if (!result) {
     //   Object.keys(rows).map(key => {
@@ -182,7 +187,6 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
     //       data = isNaN(key) ? rows[name] : rows[key][name]
 
     //     if (name) {
-
 
     //       display.push(
     //         <div
@@ -221,16 +225,14 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
     //   })
     // }
 
-    return display
-
-  }
+    return display;
+  };
 
   return (
     <div className="row">
       <h2>{title}</h2>
       <div className="row__posters">
-        {moviePath
-          && displayRows(moviePath)}
+        {moviePath && displayRows(moviePath)}
 
         {/* {moviePath &&
           Object.keys(moviePath).map((key) => {
@@ -269,8 +271,9 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
               src={
                 data.image
                   ? data.image
-                  : `${baseUrl}${isLargeRow ? data.poster_path : data.backdrop_path
-                  }`
+                  : `${baseUrl}${
+                      isLargeRow ? data.poster_path : data.backdrop_path
+                    }`
                 // data.id === 113988
                 //   ? "https://cdn.bollywoodmdb.com/fit-in/movies/largethumb/2022/hit-the-first-case/hit-the-first-case-poster-4.jpg"
                 //   :
@@ -280,25 +283,33 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
           ))}
       </div>
       <>
-        {subMovie && subMovie.map((data,i) => {
-          return <div className="row__posters">{displayRows(data,i)}</div>
-        })}
+        {subMovie &&
+          subMovie.map((data, i) => {
+            return <div className="row__posters">{displayRows(data, i)}</div>;
+          })}
       </>
       {showMovie && (
         <div className={!stretch ? "wrapper-video" : "test"}>
           {/* <button onClick={() => setStretch(!stretch)}>Zoom</button> */}
+          <input
+            webkitdirectory
+            type="file"
+            onChange={(e) => {
+              setUplaodSubs(e.target.files);
+            }}
+          />
           {showMovie.length > 1
             ? showMovie.map((data, i) => {
-              return (
-                <button
-                  onClick={() => {
-                    setShowCurrentVideo("personal" + data.path);
-                  }}
-                >
-                  Episode {i + 1}
-                </button>
-              );
-            })
+                return (
+                  <button
+                    onClick={() => {
+                      setShowCurrentVideo("personal" + data.path);
+                    }}
+                  >
+                    Episode {i + 1}
+                  </button>
+                );
+              })
             : null}
           <ReactPlayer
             url={showCurrentVideo}
@@ -308,6 +319,16 @@ function Row({ title, fetchUrl, fetchLocal, isLargeRow }) {
             className={!stretch ? "react-player" : "test"}
             width="100%"
             height="100%"
+            config={{
+              file: {
+                attributes: { crossOrigin: "anonymous" },
+                tracks: [
+                  { kind: "subtitles", src: ``, srcLang: "en", default: true },
+                  // {kind: 'subtitles', src:showCurrentVideo+'/subs/fre.srt', srcLang: 'ja'},
+                  // {kind: 'subtitles', src: showCurrentVideo+'/subs/fre.srt', srcLang: 'de'}
+                ],
+              },
+            }}
             // playIcon={<button>Play</button>}
             // light={true}
             controls={true}
